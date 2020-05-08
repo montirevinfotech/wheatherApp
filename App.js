@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Home from './screens/Home';
+import Country from './screens/Country';
+import { getCountryByName } from './api';
+
 
 export default function App() {
+  const [country, setCountry] = useState({})
+
+  const getCountryData = async (data) => {
+    const countryData = await getCountryByName(data);
+    setCountry(countryData);
+};
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      {
+        !Object.keys(country).length && 
+        <Home
+          getCountryData={getCountryData}
+        />
+      }
+      {
+        Object.keys(country).length && 
+        <Country
+          country={country}
+        />
+      }
     </View>
   );
 }
